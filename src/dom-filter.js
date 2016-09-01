@@ -98,20 +98,32 @@ class DomFilter {
 	 */
 	createInput() {
 		var me = this,
-			filterContainer = DomFilter._createNodes(me._config.filterTemplate);
+			filterContainer = DomFilter._createNodes(me._config.filterTemplate),
+			appendToNode,
+			beforeNode,
+			afterNode;
 
 
-		if ( typeof me._config.insertBefore === 'string' ) {
-			var beforeNode = document.querySelector(me._config.insertBefore);
+		if ( typeof me._config.insertBefore !== 'undefined' ) {
+			beforeNode = document.querySelector(me._config.insertBefore);
 			beforeNode.parentNode.insertBefore(filterContainer, beforeNode);
-		} else if ( typeof me._config.insertAfter === 'string' ) {
-			var afterNode = document.querySelector(me._config.insertAfter);
+		} else if ( typeof me._config.insertAfter !== 'undefined' ) {
+			afterNode = document.querySelector(me._config.insertAfter);
 			DomFilter._insertAfter(filterContainer, afterNode);
+		} else if ( typeof me._config.appendTo !== 'undefined' ){
+			appendToNode = document.querySelector(me._config.appendTo);
+			appendToNode.appendChild(filterContainer);
 		}
 
 		me._input = filterContainer.querySelector(me._config.input);
 	}
 
+	/**
+	 *
+	 * @param insertNode
+	 * @param afterNode
+	 * @private
+	 */
 	static _insertAfter(insertNode, afterNode){
 		var nextNode = afterNode.nextSibling;
 		if (typeof nextNode !== 'undefined') {
