@@ -9,7 +9,7 @@ class DomFilter {
 	constructor( config ) {
 		var me = this;
 		me._config = config || {};
-		me._config.filterTemplate = me._config.filterTemplate || '<div class="element-filter"><input type="text" placeholder="Filter menu"></div>';
+		me._config.filterTemplate = me._config.filterTemplate || '<div class="element-filter"><input type="text" placeholder="Filter"></div>';
 		me._config.input = me._config.input || '.element-filter input';
 		me._filterNodes = document.querySelectorAll(me._config.filterNodes);
 		me._hideFunction = config.hideFunction || me._fnHideUnmatched;
