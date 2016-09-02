@@ -18,9 +18,9 @@ var DomFilter = function () {
 		me._config.filterTemplate = me._config.filterTemplate || '<div class="element-filter"><input type="text" placeholder="Filter"></div>';
 		me._config.input = me._config.input || '.element-filter input';
 		me._filterNodes = document.querySelectorAll(me._config.filterNodes);
-		me._hideFunction = config.hideFunction || me._fnHideUnmatched;
-		me._showFunction = config.showFunction || me._fnShowUnmatched;
-		me._matchFunction = config.matchFunction || me._fnMatchNode;
+		me._hideFunction = config.hideFunction || DomFilter._fnHideNodes;
+		me._showFunction = config.showFunction || DomFilter._fnShowNodes;
+		me._matchFunction = config.matchFunction || DomFilter._fnMatchNode;
 		me.createInput();
 		me.registerListeners();
 	}
@@ -34,67 +34,53 @@ var DomFilter = function () {
 		key: 'registerListeners',
 		value: function registerListeners() {
 			var me = this;
-			me._input.addEventListener('keyup', function (e) {
-				return me._filterChange(e);
+			me._input.addEventListener('keypress', function (e) {
+				return me._onFilterChange(e);
+			});
+			me._input.addEventListener('change', function (e) {
+				return me._onFilterChange(e);
+			});
+			me._input.addEventListener('input', function (e) {
+				return me._onFilterChange(e);
 			});
 		}
 
 		/**
+   * The default method of showing a node
+   * removes aria-hidden attribute to each
    *
    * @param nodes
    * @private
    */
 
 	}, {
-		key: '_fnShowUnmatched',
-		value: function _fnShowUnmatched(nodes) {
-			[].forEach.call(nodes, function (node) {
-				node.removeAttribute('aria-hidden');
-			});
-		}
+		key: '_onFilterChange',
 
-		/**
-   *
-   * @param nodes
-   * @private
-   */
-
-	}, {
-		key: '_fnHideUnmatched',
-		value: function _fnHideUnmatched(nodes) {
-			[].forEach.call(nodes, function (node) {
-				node.setAttribute('aria-hidden', true);
-			});
-		}
-
-		/**
-   *
-   * @param node
-   * @returns {boolean}
-   * @private
-   */
-
-	}, {
-		key: '_fnMatchNode',
-		value: function _fnMatchNode(node, searchText) {
-			searchText = searchText.toLocaleLowerCase();
-			return node.innerText.toLocaleLowerCase().indexOf(searchText) > -1;
-		}
 
 		/**
    *
    * @param {Event} e
    * @private
    */
+		value: function _onFilterChange(e) {
+			var me = this,
+			    searchText = typeof me._input.value !== 'undefined' ? me._input.value.trim() : me._input.innerText.trim();
+			me._showFunction(me._filterNodes);
+			this.filter(searchText);
+		}
+
+		/**
+   * filter the nodes using the provided searchText
+   *
+   * @param {String} searchText
+   */
 
 	}, {
-		key: '_filterChange',
-		value: function _filterChange(e) {
+		key: 'filter',
+		value: function filter(searchText) {
 			var me = this,
-			    searchText = me._input.value.trim(),
 			    matchedNodes,
 			    unmatchedNodes;
-			me._showFunction(me._filterNodes);
 
 			if (searchText.length > 0) {
 				matchedNodes = [].filter.call(me._filterNodes, function (node) {
@@ -154,6 +140,45 @@ var DomFilter = function () {
    */
 
 	}], [{
+		key: '_fnShowNodes',
+		value: function _fnShowNodes(nodes) {
+			[].forEach.call(nodes, function (node) {
+				node.removeAttribute('aria-hidden');
+			});
+		}
+
+		/**
+   * The default method of hiding a node
+   * adds aria-hidden
+   *
+   * @param nodes
+   * @private
+   */
+
+	}, {
+		key: '_fnHideNodes',
+		value: function _fnHideNodes(nodes) {
+			[].forEach.call(nodes, function (node) {
+				node.setAttribute('aria-hidden', true);
+			});
+		}
+
+		/**
+   * The default method for matching a node to the searchText
+   *
+   * @param node
+   * @param {String} searchText
+   * @returns {boolean}
+   * @private
+   */
+
+	}, {
+		key: '_fnMatchNode',
+		value: function _fnMatchNode(node, searchText) {
+			searchText = searchText.toLocaleLowerCase();
+			return node.innerText.toLocaleLowerCase().indexOf(searchText) > -1;
+		}
+	}, {
 		key: '_insertAfter',
 		value: function _insertAfter(insertNode, afterNode) {
 			var nextNode = afterNode.nextSibling;

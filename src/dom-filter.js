@@ -12,9 +12,9 @@ class DomFilter {
 		me._config.filterTemplate = me._config.filterTemplate || '<div class="element-filter"><input type="text" placeholder="Filter"></div>';
 		me._config.input = me._config.input || '.element-filter input';
 		me._filterNodes = document.querySelectorAll(me._config.filterNodes);
-		me._hideFunction = config.hideFunction || me._fnHideUnmatched;
-		me._showFunction = config.showFunction || me._fnShowUnmatched;
-		me._matchFunction = config.matchFunction || me._fnMatchNode;
+		me._hideFunction = config.hideFunction || DomFilter._fnHideNodes;
+		me._showFunction = config.showFunction || DomFilter._fnShowNodes;
+		me._matchFunction = config.matchFunction || DomFilter._fnMatchNode;
 		me.createInput();
 		me.registerListeners();
 	}
@@ -24,38 +24,46 @@ class DomFilter {
 	 */
 	registerListeners() {
 		var me = this;
-		me._input.addEventListener('keyup', ( e ) => me._filterChange(e));
+		me._input.addEventListener('keypress', ( e ) => me._onFilterChange(e));
+		me._input.addEventListener('change', ( e ) => me._onFilterChange(e));
+		me._input.addEventListener('input', ( e ) => me._onFilterChange(e));
 	}
 
 	/**
+	 * The default method of showing a node
+	 * removes aria-hidden attribute to each
 	 *
 	 * @param nodes
 	 * @private
 	 */
-	_fnShowUnmatched( nodes ) {
+	static _fnShowNodes( nodes ) {
 		[].forEach.call(nodes, function ( node ) {
 			node.removeAttribute('aria-hidden');
 		});
 	}
 
 	/**
+	 * The default method of hiding a node
+	 * adds aria-hidden
 	 *
 	 * @param nodes
 	 * @private
 	 */
-	_fnHideUnmatched( nodes ) {
+	static _fnHideNodes( nodes ) {
 		[].forEach.call(nodes, function ( node ) {
 			node.setAttribute('aria-hidden', true);
 		});
 	}
 
 	/**
+	 * The default method for matching a node to the searchText
 	 *
 	 * @param node
+	 * @param {String} searchText
 	 * @returns {boolean}
 	 * @private
 	 */
-	_fnMatchNode( node, searchText ) {
+	static _fnMatchNode( node, searchText ) {
 		searchText = searchText.toLocaleLowerCase();
 		return node.innerText.toLocaleLowerCase().indexOf(searchText) > -1;
 	}
@@ -66,12 +74,23 @@ class DomFilter {
 	 * @param {Event} e
 	 * @private
 	 */
-	_filterChange( e ) {
+	_onFilterChange( e ) {
 		var me = this,
-			searchText = me._input.value.trim(),
+			searchText = (typeof me._input.value !== 'undefined') ? me._input.value.trim() : me._input.innerText.trim();
+		me._showFunction(me._filterNodes);
+		this.filter(searchText);
+
+	}
+
+	/**
+	 * filter the nodes using the provided searchText
+	 *
+	 * @param {String} searchText
+	 */
+	filter( searchText ) {
+		var me = this,
 			matchedNodes,
 			unmatchedNodes;
-		me._showFunction(me._filterNodes);
 
 		if ( searchText.length > 0 ) {
 			matchedNodes = [].filter.call(me._filterNodes, ( node ) => me._matchFunction(node, searchText));
@@ -79,15 +98,14 @@ class DomFilter {
 			me._showFunction(matchedNodes);
 			me._hideFunction(unmatchedNodes);
 		}
-
 	}
 
-	_getUnmatchedNodes(nodes, matchedNodes){
+	_getUnmatchedNodes( nodes, matchedNodes ) {
 		var result = [];
-		[].forEach.call(nodes, function(node){
-			if ( ![].find.call(matchedNodes, function(matchedNode){
-				return matchedNode  === node;
-			}) ){
+		[].forEach.call(nodes, function ( node ) {
+			if ( ![].find.call(matchedNodes, function ( matchedNode ) {
+					return matchedNode === node;
+				}) ) {
 				result.push(node);
 			}
 		});
@@ -111,7 +129,7 @@ class DomFilter {
 		} else if ( typeof me._config.insertAfter !== 'undefined' ) {
 			afterNode = document.querySelector(me._config.insertAfter);
 			DomFilter._insertAfter(filterContainer, afterNode);
-		} else if ( typeof me._config.appendTo !== 'undefined' ){
+		} else if ( typeof me._config.appendTo !== 'undefined' ) {
 			appendToNode = document.querySelector(me._config.appendTo);
 			appendToNode.appendChild(filterContainer);
 		}
@@ -125,9 +143,9 @@ class DomFilter {
 	 * @param afterNode
 	 * @private
 	 */
-	static _insertAfter(insertNode, afterNode){
+	static _insertAfter( insertNode, afterNode ) {
 		var nextNode = afterNode.nextSibling;
-		if (typeof nextNode !== 'undefined') {
+		if ( typeof nextNode !== 'undefined' ) {
 			afterNode.parentNode.insertBefore(insertNode, afterNode.nextSibling);
 		} else {
 			afterNode.parentNode.appendChild(insertNode);

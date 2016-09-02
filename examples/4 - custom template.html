@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<meta name="author" content="$">
-	<title>Example 1</title>
+	<title>Example 4 - custom filter template</title>
 
 
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
@@ -17,6 +17,17 @@
 			visibility: hidden;
 			height: 0;
 			/*outline: 1px solid red;*/
+		}
+		[contenteditable] {
+			display: inline-block;
+			border-top: 1px solid #333 ;
+			border-left: 1px solid #333 ;
+			border-bottom: 1px solid #999 ;
+			border-right: 1px solid #999 ;
+			min-width: 4em;
+			min-height: 1em;
+			max-width: 10em;
+			transition: width 1s ease;
 		}
 	</style>
 </head>
@@ -53,7 +64,9 @@
 		<div class="pure-u-1-2">
 			<article>
 				<h1>Custom filter template</h1>
-				<p>Using a custom filter input template, any element that supports the keyup event and can return a value should do it</p>
+				<p>Using a custom filter input template, any element that supports the keypress, change or input events
+				and has an innerText or value property should do the job.</p>
+				<p>Note: This is not intended to show best practice, just what can be done.</p>
 			</article>
 		</div>
 	</div>
@@ -65,8 +78,8 @@
 		new DomFilter({
 			insertBefore : 'nav ul',
 			filterNodes : 'nav ul li',
-			filterTemplate: '<div class="element-filter"><label for="custom-filter-input">Filter: <textarea placeholder="Filter items" rows="1" name="custom-filter-input"></textarea></label></div>',
-			input:'.element-filter textarea'
+			filterTemplate: '<div class="element-filter">Filter: <div contenteditable="true"></div></div>',
+			input:'.element-filter div[contenteditable=true]'
 		});
 
 	})();
