@@ -15,7 +15,6 @@ class DomFilter {
 		me._hideFunction = config.hideFunction || me._fnHideUnmatched;
 		me._showFunction = config.showFunction || me._fnShowUnmatched;
 		me._matchFunction = config.matchFunction || me._fnMatchNode;
-		me._unmatchFunction = config.unmatchFunction || me._fnUnmatchNode;
 		me.createInput();
 		me.registerListeners();
 	}
@@ -61,16 +60,6 @@ class DomFilter {
 		return node.innerText.toLocaleLowerCase().indexOf(searchText) > -1;
 	}
 
-	/**
-	 *
-	 * @param node
-	 * @returns {boolean}
-	 * @private
-	 */
-	_fnUnmatchNode( node, searchText ) {
-		searchText = searchText.toLocaleLowerCase();
-		return node.innerText.toLocaleLowerCase().indexOf(searchText) < 0;
-	}
 
 	/**
 	 *
@@ -86,11 +75,23 @@ class DomFilter {
 
 		if ( searchText.length > 0 ) {
 			matchedNodes = [].filter.call(me._filterNodes, ( node ) => me._matchFunction(node, searchText));
-			unmatchedNodes = [].filter.call(me._filterNodes, ( node ) => me._unmatchFunction(node, searchText));
+			unmatchedNodes = me._getUnmatchedNodes(me._filterNodes, matchedNodes);
 			me._showFunction(matchedNodes);
 			me._hideFunction(unmatchedNodes);
 		}
 
+	}
+
+	_getUnmatchedNodes(nodes, matchedNodes){
+		var result = [];
+		[].forEach.call(nodes, function(node){
+			if ( ![].find.call(matchedNodes, function(matchedNode){
+				return matchedNode  === node;
+			}) ){
+				result.push(node);
+			}
+		});
+		return result;
 	}
 
 	/**

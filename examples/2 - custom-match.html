@@ -108,25 +108,6 @@
 				title = title.toLocaleLowerCase();
 
 				return (title.indexOf(searchText) > -1) || (nodeText.indexOf(searchText) > -1);
-			},
-			/**
-			 *
-			 * @param node
-			 * @param searchText
-			 * @returns {boolean}
-			 */
-			unmatchFunction: function ( node, searchText ) {
-				var title = node.getAttribute('title'),
-					nodeText = node.innerText.toLocaleLowerCase();
-				searchText = searchText.toLocaleLowerCase();
-
-				if ( typeof title !== 'string' ) {
-					title = '';
-				}
-
-				title = title.toLocaleLowerCase();
-
-				return (title.indexOf(searchText) < 0) && (nodeText.indexOf(searchText) < 0);
 			}
 		});
 
