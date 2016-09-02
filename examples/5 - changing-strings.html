@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="author" content="$">
+	<title>Example 1 - Changing Strings</title>
+
+
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<style type="text/css">
+		article {
+			margin: 1em;
+		}
+
+		[aria-hidden=true] {
+			visibility: hidden;
+			height: 0;
+			/*outline: 1px solid red;*/
+		}
+	</style>
+</head>
+<body>
+<main>
+
+	<div class="pure-g">
+		<div class="pure-u-1-2">
+			<nav class="pure-menu">
+				<ul class="pure-menu-list">
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Lorem ipsum.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Iure, maxime.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Voluptate, voluptates?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Facere, minus?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Fugit, officia!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Expedita, perferendis.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Neque, repudiandae?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Culpa, magnam.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Molestiae, vel!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">A, nihil.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Atque, nobis.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Minus, voluptatem?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Ea, pariatur!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Doloremque, est?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Assumenda, sapiente!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Accusamus, illo!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Amet, doloremque!</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Consectetur, repellendus?</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Minus, rerum.</a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#">Labore, maiores.</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div class="pure-u-1-2">
+			<article>
+				<h1>Changing strings</h1>
+				<p>An example of changing the strings on the object instance</p>
+			</article>
+		</div>
+	</div>
+</main>
+<script type="text/javascript" src="../build/helpers.min.js"></script>
+<script type="text/javascript" src="../build/dom-filter-compiled.js"></script>
+<script type="text/javascript">
+	(function () {
+		new DomFilter({
+			insertBefore : 'nav ul',
+			filterNodes : 'nav ul li',
+			strings: {
+				'en': {
+					'feedback': {
+						'no_results'              : 'No matches',
+						'default_feedback_message': ''
+					},
+					'input'   : {
+						'placeholder': 'Search',
+						'label'      : 'Search &#x1F50E;'
+					}
+				}
+			},
+		});
+
+	})();
+</script>
+</body>
+</html>

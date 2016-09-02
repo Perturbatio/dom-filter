@@ -105,6 +105,9 @@ class DomFilter {
 
 		me._config = config || {};
 		me._initialConfig = me._config;
+		if (typeof me._config.strings !== 'undefined'){
+			me.strings = me._config.strings;
+		}
 
 		me._config.feedbackElement = me._config.feedbackElement || '.feedback';
 		me._config.containerClass = me._config.containerClass || 'element-filter';

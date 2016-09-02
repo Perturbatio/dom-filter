@@ -22,6 +22,26 @@ new DomFilter({
 });
 ```
 
+Altering the text used on the filter
+
+```javascript
+new DomFilter({
+	insertBefore : 'nav ul',
+	filterNodes : 'nav ul li',
+	strings: {
+			'en': {
+				'feedback': {
+					'no_results'              : 'No matches',
+					'default_feedback_message': ''
+				},
+				'input'   : {
+					'placeholder': 'Search',
+					'label'      : '&#1F50D;:'
+				}
+			}
+		}
+});
+``` 
 
 Custom match function (matching title as well as text content):
 
