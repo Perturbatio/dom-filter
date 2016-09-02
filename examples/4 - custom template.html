@@ -78,7 +78,11 @@
 		new DomFilter({
 			insertBefore : 'nav ul',
 			filterNodes : 'nav ul li',
-			filterTemplate: '<div class="element-filter">Filter: <div contenteditable="true"></div></div>',
+			feedbackElement: '.element-filter--feedback',
+			filterTemplate: '<div class="element-filter">{{input.label}} ' +
+				'<div contenteditable="true" class="element-filter--input"></div>' +
+				'<div class="element-filter--feedback"></div>' +
+			'</div>',
 			inputElement:'.element-filter div[contenteditable=true]'
 		});
 
