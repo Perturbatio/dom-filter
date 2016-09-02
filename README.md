@@ -2,6 +2,8 @@
 
 Provides a simple interface for filtering a list of dom nodes.
 
+![Filtering a list of nodes in a ul](img/dom-filter.png)
+
 Example usage:
 
 Basic, search input at top:
@@ -20,7 +22,11 @@ new DomFilter({
 });
 ```
 
-Custom match function:
+
+Custom match function (matching title as well as text content):
+
+![Custom filter function](img/dom-filter-custom.png)
+
 ```javascript
 new DomFilter({
 	insertBefore : 'nav ul',
@@ -47,6 +53,7 @@ new DomFilter({
 	}
 });
 ```
+
 
 Multiple filters on the same page, including tables
 ```javascript
