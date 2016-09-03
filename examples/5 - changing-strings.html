@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<meta name="author" content="$">
-	<title>Example 1 - Changing Strings</title>
+	<title>Example 5 - Changing Strings</title>
 
 
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
@@ -62,7 +62,7 @@
 <script type="text/javascript" src="../build/dom-filter-compiled.js"></script>
 <script type="text/javascript">
 	(function () {
-		new DomFilter({
+		var f = new DomFilter({
 			insertBefore : 'nav ul',
 			filterNodes : 'nav ul li',
 			strings: {
@@ -75,9 +75,21 @@
 						'placeholder': 'Search',
 						'label'      : 'Search &#x1F50E;'
 					}
+				},
+				'fr': {
+					'feedback': {
+						'no_results'              : 'Pas de correspondance',
+						'default_feedback_message': ''
+					},
+					'input'   : {
+						'placeholder': 'Chercher',
+						'label'      : 'Chercher &#x1F50E;'
+					}
 				}
 			},
+			defaultLanguage: 'fr'
 		});
+
 
 	})();
 </script>

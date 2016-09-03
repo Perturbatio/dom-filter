@@ -17,7 +17,7 @@ var DomFilter = function () {
    */
 		value: function getLangStrings(lang) {
 			var me = this;
-			lang = lang || 'en';
+			lang = lang || me._defaultLang;
 			if (typeof lang !== 'string' || !me.strings.hasOwnProperty(lang)) {
 				return {};
 			}
@@ -62,10 +62,11 @@ var DomFilter = function () {
 		key: 'defaultLanguage',
 		get: function get() {
 			var me = this;
+
 			if (typeof me._defaultLang !== 'string') {
 				me._defaultLang = 'en';
 			}
-			return me._defaultLang || '';
+			return me._defaultLang;
 		}
 
 		/**
@@ -92,7 +93,7 @@ var DomFilter = function () {
 
 		/**
    *
-   * @param {string|Element} value
+   * @param {Element} value
    */
 		,
 		set: function set(value) {
@@ -131,6 +132,8 @@ var DomFilter = function () {
 
 		me._config = config || {};
 		me._initialConfig = me._config;
+		me._defaultLang = config.defaultLanguage || 'en';
+
 		if (typeof me._config.strings !== 'undefined') {
 			me.strings = me._config.strings;
 		}
@@ -139,6 +142,7 @@ var DomFilter = function () {
 		me._config.containerClass = me._config.containerClass || 'element-filter';
 
 		me._config.filterTemplate = me._config.filterTemplate || '<div class="' + me._config.containerClass + '">' + '<label>{{input.label}}<input type="text" placeholder="{{input.placeholder}}"></label>' + '<div class="feedback"></div>' + '</div>';
+
 		me._config.inputElement = me._config.inputElement || '.element-filter input';
 		me._filterNodes = document.querySelectorAll(me._config.filterNodes);
 		me._hideFunction = me._config.hideFunction || DomFilter._fnHideNodes;
@@ -224,7 +228,8 @@ var DomFilter = function () {
 		}
 
 		/**
-   * Add a message to the feeback element
+   * Add a message to the feedback element
+   *
    * @param text
    */
 
@@ -235,6 +240,15 @@ var DomFilter = function () {
 				this.feedbackElement.innerHTML = text;
 			}
 		}
+
+		/**
+   *
+   * @param nodes
+   * @param matchedNodes
+   * @returns {Array}
+   * @private
+   */
+
 	}, {
 		key: '_getUnmatchedNodes',
 		value: function _getUnmatchedNodes(nodes, matchedNodes) {
@@ -257,10 +271,12 @@ var DomFilter = function () {
 		key: 'createFilterElement',
 		value: function createFilterElement() {
 			var me = this,
-			    filterContainer = DomFilter._createNodes(me.replaceStrings(me._config.filterTemplate, me.getLangStrings())),
+			    filterContainer,
 			    appendToNode,
 			    beforeNode,
 			    afterNode;
+
+			filterContainer = DomFilter._createNodes(me.replaceStrings(me._config.filterTemplate, me.getLangStrings()));
 
 			if (typeof me._config.insertBefore !== 'undefined') {
 				beforeNode = document.querySelector(me._config.insertBefore);
@@ -272,7 +288,9 @@ var DomFilter = function () {
 				appendToNode = document.querySelector(me._config.appendTo);
 				appendToNode.appendChild(filterContainer);
 			}
-
+			if (me.filterContainer) {
+				me.filterContainer.parentNode.removeChild(me.filterContainer);
+			}
 			me.filterContainer = filterContainer;
 			me.inputElement = filterContainer.querySelector(me._config.inputElement);
 		}
