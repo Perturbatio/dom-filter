@@ -96,14 +96,9 @@
 			 * @returns {boolean}
 			 */
 			matchFunction  : function ( node, searchText ) {
-				var title = node.getAttribute('title'),
+				var title = node.getAttribute('title') || '',
 					nodeText = node.innerText.toLocaleLowerCase();
 				searchText = searchText.toLocaleLowerCase();
-
-
-				if ( typeof title !== 'string' ) {
-					title = '';
-				}
 
 				title = title.toLocaleLowerCase();
 
